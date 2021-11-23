@@ -1,154 +1,103 @@
 resource "aws_cloudfront_distribution" "devout" {
   origin {
-    domain_name = aws_s3_bucket.devout_website.bucket_regional_domain_name
-    origin_id   = local.s3_origin_id
-
-    # s3_origin_config {
-    #   origin_access_identity = "origin-access-identity/cloudfront/ABCDEFG1234567"
-    # }
+    domain_name = aws_s3_bucket.devout.bucket_regional_domain_name
+    origin_id   = var.s3_origin_id
   }
-  enabled             = true
-  is_ipv6_enabled     = true
-  comment             = "managed by terraform"
-  default_root_object = "index.html"
+  enabled             = var.enabled
+  is_ipv6_enabled     = var.is_ipv6_enabled
+  comment             = var.comment
+  default_root_object = var.default_root_object
 
   logging_config {
-    include_cookies = false
-    bucket          = "devout.dev.s3.amazonaws.com"
-    prefix          = "devout"
+    include_cookies = var.include_cookies
+    bucket          = "${var.bucket}.s3.amazonaws.com"
+    prefix          = var.prefix
   }
-
-  # aliases = ["devout.dev", "www.devout.dev"]
 
   default_cache_behavior {
-    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
-    cached_methods   = ["GET", "HEAD"]
+    allowed_methods  = var.allowed_methods["default_cache_behavior"]
+    cached_methods   = var.cached_methods["default_cache_behavior"]
     target_origin_id = local.s3_origin_id
 
     forwarded_values {
-      query_string = false
+      query_string = var.query_string["default_cache_behavior"]
 
       cookies {
-        forward = "none"
+        forward = var.cookies_forward["default_cache_behavior"]
       }
     }
 
-    viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = 0
-    default_ttl            = 3600
-    max_ttl                = 86400
+    viewer_protocol_policy = var.viewer_protocol_policy["default_cache_behavior"]
+    min_ttl                = var.ttl["default_cache_behavior_min"]
+    default_ttl            = var.ttl["default_cache_behavior_default"]
+    max_ttl                = var.ttl["default_cache_behavior_max"]
   }
 
   ordered_cache_behavior {
-    path_pattern     = "/content/immutable/*"
-    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
-    cached_methods   = ["GET", "HEAD", "OPTIONS"]
-    target_origin_id = local.s3_origin_id
+    path_pattern     = var.path_pattern["ordered_cache_behavior_precedence_0"]
+    allowed_methods  = var.allowed_methods["ordered_cache_behavior_precedence_0"]
+    cached_methods   = var.cached_methods["ordered_cache_behavior_precedence_0"]
+    target_origin_id = var.s3_origin_id
 
     forwarded_values {
-      query_string = false
-      headers      = ["Origin"]
+      query_string = var.query_string["ordered_cache_behavior_precedence_0"]
+      headers      = var.headers
 
       cookies {
-        forward = "none"
+        forward = var.cookies_forward["ordered_cache_behavior_precedence_0"]
       }
     }
 
-    min_ttl                = 0
-    default_ttl            = 86400
-    max_ttl                = 31536000
-    compress               = true
-    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = var.ttl["ordered_cache_behavior_precedence_0_min"]
+    default_ttl            = var.ttl["ordered_cache_behavior_precedence_0_default"]
+    max_ttl                = var.ttl["ordered_cache_behavior_precedence_0_max"]
+    compress               = var.compress["ordered_cache_behavior_precedence_0"]
+    viewer_protocol_policy = var.viewer_protocol_policy["ordered_cache_behavior_precedence_0"]
   }
 
   ordered_cache_behavior {
-    path_pattern     = "/content/*"
-    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = local.s3_origin_id
+    path_pattern     = var.path_pattern["ordered_cache_behavior_precedence_1"]
+    allowed_methods  = var.allowed_methods["ordered_cache_behavior_precedence_1"]
+    cached_methods   = var.cached_methods["ordered_cache_behavior_precedence_1"]
+    target_origin_id = var.s3_origin_id
 
     forwarded_values {
-      query_string = false
+      query_string = var.query_string["ordered_cache_behavior_precedence_1"]
 
       cookies {
-        forward = "none"
+        forward = var.cookies_forward["ordered_cache_behavior_precedence_1"]
       }
     }
 
-    min_ttl                = 0
-    default_ttl            = 3600
-    max_ttl                = 86400
-    compress               = true
-    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = var.ttl["ordered_cache_behavior_precedence_1_min"]
+    default_ttl            = var.ttl["ordered_cache_behavior_precedence_1_default"]
+    max_ttl                = var.ttl["ordered_cache_behavior_precedence_1_max"]
+    compress               = var.compress["ordered_cache_behavior_precedence_1"]
+    viewer_protocol_policy = var.viewer_protocol_policy["ordered_cache_behavior_precedence_1"]
   }
 
-  price_class = "PriceClass_100"
+  price_class = var.price_class
 
   restrictions {
     geo_restriction {
-      restriction_type = "none"
-      locations        = null
+      restriction_type = var.restriction_type
+      locations        = var.locations
     }
   }
 
   tags = {
-    Environment = "production"
+    Environment = terraform.workspace
+    Created     = timestamp()
   }
 
   viewer_certificate {
-    cloudfront_default_certificate = true
-    ssl_support_method             = "sni-only"
+    cloudfront_default_certificate = var.cloudfront_default_certificate
+    ssl_support_method             = var.ssl_support_method
   }
 }
 
-
-
-
-# data "aws_route53_zone" "devout_zone" {
-#   name = aws_cloudfront_distribution.devout.domain_name
-# }
-
-data "aws_cloudfront_distribution" "devout_cloudfront_distribution" {
+data "aws_cloudfront_distribution" "devout" {
   id = aws_cloudfront_distribution.devout.id
 }
-
-
-
-
-
-
-# resource "aws_route53_record" "devout_ns_record" {
-#   zone_id  = aws_route53_zone.devout_zone.id
-#   name     = var.domain_names[0]
-#   type     = "NS"
-#   alias {
-#     name                   = aws_route53_zone.devout_zone.name
-#     zone_id                = aws_route53_zone.devout_zone.id
-#     evaluate_target_health = false
-#   }
-# }
-
-# resource "aws_route53_record" "devout_soa_record" {
-#   zone_id  = aws_route53_zone.devout_zone.id
-#   name     = var.domain_names[0]
-#   type     = "SOA"
-#   alias {
-#     name                   = aws_route53_zone.devout_zone.name
-#     zone_id                = aws_route53_zone.devout_zone.id
-#     evaluate_target_health = false
-#   }
-# }
-
-# resource "aws_route53_record" "devout_cname_record" {
-#   for_each = toset(var.domain_names)
-#   zone_id  = aws_route53_zone.devout_zone.id
-#   name     = each.value
-#   type     = "cname"
-#   alias {
-#     name                   = data.aws_cloudfront_distribution.devout_cloudfront_distribution.domain_name
-#     zone_id                = data.data.aws_route53_zone.devout_zone.hosted_zone_id
-#     evaluate_target_health = false
-#   }
-# }
 
 
