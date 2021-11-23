@@ -1,34 +1,26 @@
 resource "aws_s3_bucket" "devout" {
-  bucket = "devout.dev"
-  acl    = "public-read"
+  bucket =  var.bucket
+  acl    = var.bucket_acl
   policy = file("policy.json")
 
   website {
-    index_document = "index.html"
-    error_document = "404.html"
+    index_document =  var.index_document
+    error_document =  var.error_document
 
-    routing_rules = <<EOF
-[{
-    "Condition": {
-        "KeyPrefixEquals": "docs/"
-    },
-    "Redirect": {
-        "ReplaceKeyPrefixWith": "documents/"
-    }
-}]
-EOF
+    routing_rules = file("routing_rules.json")
   }
+  
   cors_rule {
-    allowed_headers = ["*"]
-    allowed_methods = ["PUT", "POST"]
-    allowed_origins = ["https://devout.dev"]
-    expose_headers  = ["ETag"]
-    max_age_seconds = 3000
+    allowed_headers = var.cors_rule.allowed_headers
+    allowed_methods = var.cors_rule.allowed_methods
+    allowed_origins = var.cors_rule.allowed_origins
+    expose_headers  = var.cors_rule.expose_headers
+    max_age_seconds = var.cors_rule.max_age_seconds
   }
 
   versioning {
 
-    enabled = true
+    enabled = var.bucket_versioning_enabled
   }
 
 }
@@ -55,10 +47,10 @@ resource "aws_s3_bucket_policy" "devout" {
 }
 
 resource "aws_s3_bucket_object" "devout" {
-  for_each     = fileset("../devoutS3Files/", "*")
+  for_each     = fileset("${var.html_directory}", "*")
   bucket       = aws_s3_bucket.devout.id
   key          = each.value
-  source       = "../devoutS3Files/${each.value}"
-  etag         = filemd5("../devoutS3Files/${each.value}")
-  content_type = "text/html"
+  source       = join("", ["${var.html_directory}"],["${each.value}"])
+  etag         = filemd5(join("", ["${var.html_directory}"],["${each.value}"]))
+  content_type =  var.content_type
 }

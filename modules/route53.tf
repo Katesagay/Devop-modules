@@ -18,7 +18,7 @@ resource "aws_route53_record" "devout_a_record" {
   alias {
     name                   = replace(aws_cloudfront_distribution.devout.domain_name, "/[.]$/", "")
     zone_id                = aws_cloudfront_distribution.devout.hosted_zone_id
-    evaluate_target_health = false
+    evaluate_target_health = var.evaluate_target_health
   }
   depends_on = [aws_cloudfront_distribution.devout]
 }

@@ -129,3 +129,58 @@ variable "compress" {
   type    = map(string)
   default = {}
 }
+
+variable "evaluate_target_health" {   
+  type    = bool
+  default = false
+}
+
+variable "bucket_acl" {
+    type    = string
+  default = ""
+}
+variable "bucket_policy" {
+    type    = string
+  default = ""
+} 
+variable "cors_rule" {
+    type    =  object({
+    allowed_headers = any  
+   allowed_methods = any
+    allowed_origins  = any
+     expose_headers = any
+     max_age_seconds = any
+  })
+  default = {
+ allowed_headers = ["*"],
+  allowed_methods = ["PUT", "POST"],
+  allowed_origins = ["https://devout.dev"],
+  expose_headers = ["ETag"],
+  max_age_seconds = "3000"
+
+  }
+}
+
+variable "index_document" {
+   type    = string
+  default = ""
+}
+variable "error_document" {
+   type    = string
+  default = ""
+}
+
+variable "bucket_versioning_enabled" {
+    type    = bool
+  default = true  
+}
+
+variable "html_directory" {
+  type = string
+  default = ""
+}
+variable "content_type" { 
+  type = string
+  default = ""
+  
+}
