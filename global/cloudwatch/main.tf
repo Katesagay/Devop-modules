@@ -1,8 +1,11 @@
-module "route53" {
 
-}
 module "cloudfront" {
-
+source             = "./modules/cloudfront/"
+distribution_id = "ENVIPJPV5V6ES"
+alarms = {"4xxErrorRate" = {
+      threshold = 5 
+    } }
+    arn = module.alert_distribution.cloudwatch-alarm-topic.arn
 }
 
 
@@ -20,10 +23,10 @@ module "s3" {
 
 module "alert_distribution" {
   source             = "./modules/alert_distribution/"
-  email_address_list = ""
+  email_address_list = "kate_sagay@hotmail.com"
   sns = {
-    name         = "devops-cloudwatch-alarm-topic"
-    display_name = "cloudwatch-alarm-topic"
+    name         = "devout-cloudwatch-alarm-topic"
+    display_name = "devout-cloudwatch-alarm-topic"
     region       = "eu-west-1"
   account-id = "" }
   threshold = 5
