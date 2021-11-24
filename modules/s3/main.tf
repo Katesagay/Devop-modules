@@ -1,13 +1,46 @@
 resource "aws_s3_bucket" "devout" {
-  bucket =  join("", ["${local.environment_prefix}"],["${var.bucket}"])
+  bucket = local.bucket_name
   acl    = var.bucket_acl
-  policy = file("./policy.json")
+  policy =jsonencode({
+    Version = "2012-10-17"
+    Id      = "Policy1562539893344"
+    Statement = [
+      {
+        Sid       = "Stmt1562539892089"
+        Effect    = "Allow"
+        Principal = "*"
+        Action    = "s3:GetObject"
+        Resource = ["arn:aws:s3:::${local.bucket_name}/*",
+        ]
+      },
+    ]
+  })
+
+  
+  
+  
+  
+#    <<EOL
+#   {
+#     "Version": "2012-10-17",
+#     "Id": "Policy1562539893344",
+#     "Statement": [
+#         {
+#             "Sid": "Stmt1562539892089",
+#             "Effect": "Allow",
+#             "Principal": "*",
+#             "Action": "s3:GetObject",
+#             "Resource": "arn:aws:s3:::${local.bucket_name}/*"
+#         }
+#     ]
+# } 
+# EOL
 
   website {
     index_document =  var.index_document
     error_document =  var.error_document
 
-    routing_rules = file("./routing_rules.json")
+    routing_rules = file("./modules/s3/routing_rules.json")
   }
   
   cors_rule {

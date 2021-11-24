@@ -1,148 +1,14 @@
-variable "domain_names" {
-  type    = list(any)
-  default = []
-}
-variable "soa_record" {
-  type    = string
-  default = ""
-}
-variable "a_record" {
-  type    = string
-  default = ""
-}
 
-variable "cname_record" {
-  type    = string
-  default = ""
-}
-variable "cname_wwwrecord" {
-  type    = string
-  default = ""
-}
-variable "ns_record" {
-  type    = list(any)
-  default = []
-}
-
-variable "ttl" {
-  type    = map(any)
-  default = {}
-}
-
-variable "zone_id" {
-  type    = string
-  default = ""
-
-}
-variable "cloudfront_distribution" {
-  type    = string
-  default = ""
-}
-
-variable "email" {
-  type    = list(string)
-  default = []
-
-}
-variable "s3_origin_id" {
-  type    = string
-  default = ""
-}
-variable "enabled" {
-  type    = bool
-  default = true
-}
-variable "is_ipv6_enabled" {
-  type    = bool
-  default = true
-}
-variable "comment" {
-  type    = string
-  default = ""
-}
-variable "default_root_object" {
-  type    = string
-  default = ""
-}
-variable "include_cookies" {
-  type    = bool
-  default = false
-}
 variable "bucket" {
   type    = string
-  default = ""
-}
-variable "prefix" {
-  type    = string
-  default = ""
-}
-variable "allowed_methods" {
- type    = map(list(string))
-  default = {}
-}
-variable "cached_methods" {
- type    = map(list(string))
-  default = {}
-}
-variable "query_string" {
- type    = map(string)
-  default = {}
-}
-variable "cookies_forward" {
-  type    = map(string)
-  default = {}
-}
-variable "viewer_protocol_policy" {
- type    = map(string)
-  default = {}
-}
-
-variable "path_pattern" {
-  type    = map(string)
-  default = {}
-}
-variable "headers" {
-  type    = list
-  default = []
-}
-variable "price_class" {
-  type    = string
-  default = ""
-}
-variable "restriction_type" {
-  type    = string
-  default = ""
-}
-variable "locations" {
-  type    = list(string)
-  default = []
-}
-variable "cloudfront_default_certificate" {
-  type    = bool
-  default = true
-}
-variable "ssl_support_method" {
-  type    = string
-  default = ""
-}
-variable "compress" {
-  type    = map(string)
-  default = {}
-}
-
-variable "evaluate_target_health" {   
-  type    = bool
-  default = false
+  default = "devout.dev"
 }
 
 variable "bucket_acl" {
     type    = string
-  default = ""
+  default = "authenticated-read"
 }
-variable "bucket_policy" {
-    type    = string
-  default = ""
-} 
+
 variable "cors_rule" {
     type    =  object({
     allowed_headers = any  
@@ -163,11 +29,11 @@ variable "cors_rule" {
 
 variable "index_document" {
    type    = string
-  default = ""
+  default = "index.html"
 }
 variable "error_document" {
    type    = string
-  default = ""
+  default = "404.html"
 }
 
 variable "bucket_versioning_enabled" {
@@ -177,10 +43,10 @@ variable "bucket_versioning_enabled" {
 
 variable "html_directory" {
   type = string
-  default = ""
+  default = "././devoutS3Files/"
 }
 variable "content_type" { 
   type = string
-  default = ""
+  default = "text/html"
   
 }

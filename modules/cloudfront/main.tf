@@ -10,7 +10,7 @@ resource "aws_cloudfront_distribution" "devout" {
 
   logging_config {
     include_cookies = var.include_cookies 
-    bucket          = join("", ["${local.environment_prefix}"],["${var.bucket}.s3.amazonaws.com"])
+    bucket          = var.bucket_name
     prefix          = var.prefix
   }
 
