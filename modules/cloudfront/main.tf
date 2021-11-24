@@ -1,6 +1,6 @@
 resource "aws_cloudfront_distribution" "devout" {
   origin {
-    domain_name = aws_s3_bucket.devout.bucket_regional_domain_name
+    domain_name = var.origin_domain_name
     origin_id   = var.s3_origin_id
   }
   enabled             = var.enabled
@@ -9,15 +9,15 @@ resource "aws_cloudfront_distribution" "devout" {
   default_root_object = var.default_root_object
 
   logging_config {
-    include_cookies = var.include_cookies
-    bucket          = "${var.bucket}.s3.amazonaws.com"
+    include_cookies = var.include_cookies 
+    bucket          = join("", ["${local.environment_prefix}"],["${var.bucket}.s3.amazonaws.com"])
     prefix          = var.prefix
   }
 
   default_cache_behavior {
     allowed_methods  = var.allowed_methods["default_cache_behavior"]
     cached_methods   = var.cached_methods["default_cache_behavior"]
-    target_origin_id = local.s3_origin_id
+    target_origin_id = var.s3_origin_id
 
     forwarded_values {
       query_string = var.query_string["default_cache_behavior"]
@@ -76,7 +76,7 @@ resource "aws_cloudfront_distribution" "devout" {
     viewer_protocol_policy = var.viewer_protocol_policy["ordered_cache_behavior_precedence_1"]
   }
 
-  price_class = var.price_class
+  price_class = lookup(var.price_class,terraform.workspace)
 
   restrictions {
     geo_restriction {

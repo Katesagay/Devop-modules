@@ -1,13 +1,13 @@
 resource "aws_s3_bucket" "devout" {
-  bucket =  var.bucket
+  bucket =  join("", ["${local.environment_prefix}"],["${var.bucket}"])
   acl    = var.bucket_acl
-  policy = file("policy.json")
+  policy = file("./policy.json")
 
   website {
     index_document =  var.index_document
     error_document =  var.error_document
 
-    routing_rules = file("routing_rules.json")
+    routing_rules = file("./routing_rules.json")
   }
   
   cors_rule {
@@ -23,7 +23,7 @@ resource "aws_s3_bucket" "devout" {
     enabled = var.bucket_versioning_enabled
   }
 
-}
+} 
 
 resource "aws_s3_bucket_policy" "devout" {
   bucket = aws_s3_bucket.devout.id

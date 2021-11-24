@@ -15,11 +15,11 @@ resource "aws_route53_record" "devout_a_record" {
   zone_id  = data.aws_route53_zone.devout.zone_id
   name     = each.value
   type     = "A"
-  alias {
-    name                   = replace(aws_cloudfront_distribution.devout.domain_name, "/[.]$/", "")
-    zone_id                = aws_cloudfront_distribution.devout.hosted_zone_id
+  alias {  
+    name                   = replace(var.cloudfront_distribution_domain_name, "/[.]$/", "")
+    zone_id                = var.zone_id
     evaluate_target_health = var.evaluate_target_health
   }
-  depends_on = [aws_cloudfront_distribution.devout]
+  depends_on = [var.zone_id]
 }
 
