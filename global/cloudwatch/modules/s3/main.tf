@@ -1,7 +1,7 @@
 resource "aws_cloudwatch_metric_alarm" "s3_numberofbytes" {
 
   actions_enabled     = var.actions_enabled
-  treat_missing_data  = "breaching" 
+  treat_missing_data  = "breaching"
   alarm_name          = "${local.website_domain_name}_s3_alarm"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = var.evaluation_periods

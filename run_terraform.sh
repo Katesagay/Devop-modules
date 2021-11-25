@@ -9,7 +9,7 @@ terraform workspace new dev
 terraform plan -var-file="development/terraform.tfvars"
 terraform apply -auto-approve
 # wait a minute after successful deployment 
-sleep 30
+sleep 60
 #  curl
 curl -I http://$(terraform output website)
 # destroy

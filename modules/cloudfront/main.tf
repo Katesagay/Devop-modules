@@ -9,7 +9,7 @@ resource "aws_cloudfront_distribution" "devout" {
   default_root_object = var.default_root_object
 
   logging_config {
-    include_cookies = var.include_cookies 
+    include_cookies = var.include_cookies
     bucket          = var.bucket_name
     prefix          = var.prefix
   }
@@ -76,7 +76,7 @@ resource "aws_cloudfront_distribution" "devout" {
     viewer_protocol_policy = var.viewer_protocol_policy["ordered_cache_behavior_precedence_1"]
   }
 
-  price_class = lookup(var.price_class,terraform.workspace)
+  price_class = lookup(var.price_class, terraform.workspace)
 
   restrictions {
     geo_restriction {

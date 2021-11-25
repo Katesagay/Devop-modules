@@ -1,12 +1,12 @@
 
 resource "aws_sns_topic" "cloudwatch-alarm-topic" {
   name         = "${var.topic_name}-cloudwatch-alarm-topic"
-  display_name =  "${var.topic_name}-cloudwatch-alarm-topic"
+  display_name = "${var.topic_name}-cloudwatch-alarm-topic"
   policy       = data.aws_iam_policy_document.sns-topic-policy.json
 }
 resource "aws_sns_topic_subscription" "sns-topic" {
   topic_arn = aws_sns_topic.cloudwatch-alarm-topic.arn
-  protocol  =  var.protocol
+  protocol  = var.protocol
   endpoint  = var.email_address
 
 }
@@ -52,4 +52,4 @@ data "aws_iam_policy_document" "sns-topic-policy" {
 }
 output "cloudwatch-alarm-topic" {
   value = aws_sns_topic.cloudwatch-alarm-topic
-} 
+}

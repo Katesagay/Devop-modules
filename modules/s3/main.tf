@@ -1,7 +1,8 @@
 resource "aws_s3_bucket" "devout" {
-  bucket = local.bucket_name
-  acl    = var.bucket_acl
-  policy =jsonencode({
+  bucket        = local.bucket_name
+  acl           = var.bucket_acl
+  force_destroy = var.force_destroy
+  policy = jsonencode({
     Version = "2012-10-17"
     Id      = "Policy1562539893344"
     Statement = [
@@ -18,8 +19,8 @@ resource "aws_s3_bucket" "devout" {
 
 
   website {
-    index_document =  var.index_document
-    error_document =  var.error_document
+    index_document = var.index_document
+    error_document = var.error_document
 
     routing_rules = file("./modules/s3/routing_rules.json")
   }
@@ -36,7 +37,7 @@ resource "aws_s3_bucket" "devout" {
     enabled = var.bucket_versioning_enabled
   }
 
-} 
+}
 
 resource "aws_s3_bucket_policy" "devout" {
   bucket = aws_s3_bucket.devout.id
@@ -63,9 +64,9 @@ resource "aws_s3_bucket_object" "devout" {
   for_each     = fileset("${var.html_directory}", "*")
   bucket       = aws_s3_bucket.devout.id
   key          = each.value
-  source       = join("", ["${var.html_directory}"],["${each.value}"])
-  etag         = filemd5(join("", ["${var.html_directory}"],["${each.value}"]))
-  content_type =  (each.value != "*.css" ? "text/html" : "text/css")
+  source       = join("", ["${var.html_directory}"], ["${each.value}"])
+  etag         = filemd5(join("", ["${var.html_directory}"], ["${each.value}"]))
+  content_type = (each.value != "*.css" ? "text/html" : "text/css")
   # if filename ends with .css then metadata = text/css and content_type = text/css
-  
+
 }

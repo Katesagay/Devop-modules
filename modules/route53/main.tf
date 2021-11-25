@@ -15,7 +15,7 @@ resource "aws_route53_record" "devout_a_record" {
   zone_id  = data.aws_route53_zone.devout.zone_id
   name     = each.value
   type     = "A"
-  alias {  
+  alias {
     name                   = replace(var.cloudfront_distribution_domain_name, "/[.]$/", "")
     zone_id                = var.zone_id
     evaluate_target_health = var.evaluate_target_health
@@ -26,7 +26,7 @@ resource "aws_route53_record" "devout_a_record" {
 
 
 locals {
-   environment_prefix = (terraform.workspace != "prod" ? "${terraform.workspace}" : "")
-   bucket_name = join("", ["${local.environment_prefix}"],["${var.domain_name}"])
- domain_names = ["${local.bucket_name}","www.${local.bucket_name}"]
+  environment_prefix = (terraform.workspace != "prod" ? "${terraform.workspace}" : "")
+  bucket_name        = join("", ["${local.environment_prefix}"], ["${var.domain_name}"])
+  domain_names       = ["${local.bucket_name}", "www.${local.bucket_name}"]
 }

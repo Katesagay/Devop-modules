@@ -1,3 +1,3 @@
 output "aws_cloudfront_distribution" {
-  value = "${aws_cloudfront_distribution.devout}"
+  value = aws_cloudfront_distribution.devout
 } 

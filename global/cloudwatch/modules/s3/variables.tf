@@ -1,31 +1,32 @@
-variable "actions_enabled"{
-  description = "Enable actions"
+variable "actions_enabled" {
   type        = bool
+  description = "Enable actions"
   default     = true
 }
-variable "domain_name"{
-  description = "S3 bucket name and domain name"
+variable "domain_name" {
+
   type        = string
+  description = "S3 bucket name and domain name"
   default     = ""
 }
-variable "evaluation_periods"{
-  description = "Number of periods to look back"
+variable "evaluation_periods" {
   type        = number
+  description = "Number of periods to look back"
   default     = 1
 }
-variable "period"{
-  description = "Period to look back"
+variable "period" {
   type        = number
+  description = "Period to look back"
   default     = 60
 }
-variable "threshold"{
-  description = "Threshold to trigger action"
+variable "threshold" {
   type        = number
+  description = "Threshold to trigger action"
   default     = 1
 }
-variable "storage_type"{
-  description = "Storage type"
+variable "storage_type" {
   type        = string
+  description = "Storage type"
   default     = "AllStorageTypes"
 }
-variable "arn"{}
+variable "arn" {}
