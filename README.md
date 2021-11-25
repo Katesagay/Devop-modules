@@ -1,6 +1,43 @@
+
+
+# Welcome to My DevOps Challenge!
 ## Requirements
 
-Hello welcome to My
+Hi! 
+To deploy and run this application  follow the steps below:
+
+ 1.  Clone this repo
+ 2. Provide the relevent values for the variables in both the d`evelopment/terraform.tfvars` file and the `production/terraform.tfvars`. 
+ 3. Provide `access keys`, `secret keys` and a `region` to deploy the infrastructure to your environment -  make use of the `providers.tf` file in the root directory.
+ 4.  To test the application in development, please run `run_terraform_development.sh`
+ 5. To deploy the application in production, please run `run_terraform_development.sh`
+ 6. Please follow the instructions given in the console
+ 
+
+# Required input variable
+Before creating the resources you will need to provide input these variables in the `terraform.tfvars` file.
+
+    domain_name
+    
+    bucket_acl
+    
+    force_destroy
+    
+    cloudfront_actions_enabled
+    
+    S3_actions_enabled
+     
+    email_address
+    
+    topic_name
+    
+    sns
+    
+    account-id
+  # Architecture 
+![image](https://user-images.githubusercontent.com/37669567/143487020-4b959b9d-c6f6-4e37-bbf3-2863f20cc3df.png)
+
+
 
 ## Providers
 
