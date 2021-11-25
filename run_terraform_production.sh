@@ -5,7 +5,7 @@ terraform workspace show
 terraform workspace new prod 
 echo "Commencing plan and save to directory...."
 
-terraform plan -out="production_plan_terraform.json"
+terraform plan -out="production_plan_terraform.json" -var-file="production/terraform.tfvars"
 terraform apply -auto-approve -var-file="production/terraform.tfvars"
 echo "Commencing apply...."
 sleep 60

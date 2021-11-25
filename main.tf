@@ -22,7 +22,7 @@ module "cloudfront" {
 module "cloudfront_alarm" {
   source          = "./global/cloudwatch/modules/cloudfront/"
   actions_enabled = var.cloudfront_actions_enabled
-  distribution_id = var.distribution_id
+  distribution_id = module.cloudfront.aws_cloudfront_distribution_id.id
   arn             = module.alert_distribution_alarm.cloudwatch-alarm-topic.arn
 
 }

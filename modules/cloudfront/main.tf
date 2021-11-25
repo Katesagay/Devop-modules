@@ -96,8 +96,11 @@ resource "aws_cloudfront_distribution" "devout" {
   }
 }
 
-data "aws_cloudfront_distribution" "devout" {
-  id = aws_cloudfront_distribution.devout.id
+# data "aws_cloudfront_distribution" "devout" {
+#   id = aws_cloudfront_distribution.devout.id
+# }
+
+
+output "aws_cloudfront_distribution_id" {
+  value = aws_cloudfront_distribution.devout
 }
-
-

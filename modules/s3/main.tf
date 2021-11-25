@@ -66,7 +66,18 @@ resource "aws_s3_bucket_object" "devout" {
   key          = each.value
   source       = join("", ["${var.html_directory}"], ["${each.value}"])
   etag         = filemd5(join("", ["${var.html_directory}"], ["${each.value}"]))
-  content_type = (each.value != "*.css" ? "text/html" : "text/css")
+  content_type = "text/html"
+  # if filename ends with .css then metadata = text/css and content_type = text/css
+
+}
+
+resource "aws_s3_bucket_object" "devout_css" {
+  for_each     = fileset("${var.html_directory}", "*.css")
+  bucket       = aws_s3_bucket.devout.id
+  key          = each.value
+  source       = join("", ["${var.html_directory}"], ["${each.value}"])
+  etag         = filemd5(join("", ["${var.html_directory}"], ["${each.value}"]))
+  content_type = "text/css"
   # if filename ends with .css then metadata = text/css and content_type = text/css
 
 }
