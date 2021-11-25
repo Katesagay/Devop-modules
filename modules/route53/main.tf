@@ -1,9 +1,9 @@
 resource "aws_route53_zone" "devout" {
-  name = var.domain_names[0]
+  name = local.domain_names[0]
 }
 
 data "aws_route53_zone" "devout" {
-  name = var.domain_names[0]
+  name = local.domain_names[0]
   depends_on = [
     aws_route53_zone.devout
   ]
@@ -11,7 +11,7 @@ data "aws_route53_zone" "devout" {
 
 
 resource "aws_route53_record" "devout_a_record" {
-  for_each = toset(var.domain_names)
+  for_each = toset(local.domain_names)
   zone_id  = data.aws_route53_zone.devout.zone_id
   name     = each.value
   type     = "A"
@@ -23,3 +23,10 @@ resource "aws_route53_record" "devout_a_record" {
   depends_on = [var.zone_id]
 }
 
+
+
+locals {
+   environment_prefix = (terraform.workspace != "prod" ? "${terraform.workspace}" : "")
+   bucket_name = join("", ["${local.environment_prefix}"],["${var.domain_name}"])
+ domain_names = ["${local.bucket_name}","www.${local.bucket_name}"]
+}

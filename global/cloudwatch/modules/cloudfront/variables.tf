@@ -1,18 +1,18 @@
 variable "distribution_id"{
   description = "Distribution ID"
   type = string
-  default = "test-distribution-id"
+  default = ""
 }
 variable "actions_enabled"{
   description = "Enable actions"
   type        = bool
   default     = true
 }
-# variable ""{
-#   description = ""
-#   type        = string
-#   default     = ""
-# }
+variable "domain_name"{
+  description = ""
+  type        = string
+  default     = ""
+}
 variable "evaluation_periods"{
   description = "Number of periods to look back"
   type        = number
@@ -28,11 +28,7 @@ variable "default_threshold"{
   type        = number
   default     = 1
 }
-# variable ""{
-#   description = ""
-#   type        = string
-#   default     = ""
-# }
+
 variable "arn"{}
 variable "alarms" {
   type = map(any)

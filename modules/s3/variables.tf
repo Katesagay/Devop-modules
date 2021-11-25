@@ -1,26 +1,24 @@
 
-variable "bucket" {
+variable "domain_name" {
   type    = string
-  default = "devout.dev"
+  default = ""
 }
 
 variable "bucket_acl" {
     type    = string
-  default = "authenticated-read"
+  default = "public-read"
 }
 
 variable "cors_rule" {
     type    =  object({
     allowed_headers = any  
    allowed_methods = any
-    allowed_origins  = any
      expose_headers = any
      max_age_seconds = any
   })
   default = {
  allowed_headers = ["*"],
   allowed_methods = ["PUT", "POST"],
-  allowed_origins = ["https://devout.dev"],
   expose_headers = ["ETag"],
   max_age_seconds = "3000"
 

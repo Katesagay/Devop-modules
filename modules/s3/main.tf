@@ -16,25 +16,6 @@ resource "aws_s3_bucket" "devout" {
     ]
   })
 
-  
-  
-  
-  
-#    <<EOL
-#   {
-#     "Version": "2012-10-17",
-#     "Id": "Policy1562539893344",
-#     "Statement": [
-#         {
-#             "Sid": "Stmt1562539892089",
-#             "Effect": "Allow",
-#             "Principal": "*",
-#             "Action": "s3:GetObject",
-#             "Resource": "arn:aws:s3:::${local.bucket_name}/*"
-#         }
-#     ]
-# } 
-# EOL
 
   website {
     index_document =  var.index_document
@@ -42,11 +23,10 @@ resource "aws_s3_bucket" "devout" {
 
     routing_rules = file("./modules/s3/routing_rules.json")
   }
-  
   cors_rule {
     allowed_headers = var.cors_rule.allowed_headers
     allowed_methods = var.cors_rule.allowed_methods
-    allowed_origins = var.cors_rule.allowed_origins
+    allowed_origins = ["https://${local.bucket_name}"]
     expose_headers  = var.cors_rule.expose_headers
     max_age_seconds = var.cors_rule.max_age_seconds
   }
@@ -85,5 +65,7 @@ resource "aws_s3_bucket_object" "devout" {
   key          = each.value
   source       = join("", ["${var.html_directory}"],["${each.value}"])
   etag         = filemd5(join("", ["${var.html_directory}"],["${each.value}"]))
-  content_type =  var.content_type
+  content_type =  (each.value != "*.css" ? "text/html" : "text/css")
+  # if filename ends with .css then metadata = text/css and content_type = text/css
+  
 }

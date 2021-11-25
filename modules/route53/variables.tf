@@ -1,6 +1,6 @@
-variable "domain_names" {
-  type    = list(any)
-  default = []
+variable "domain_name" {
+  type    = string
+  default = ""
 }
 variable "zone_id" {}
 

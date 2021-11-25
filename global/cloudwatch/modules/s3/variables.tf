@@ -3,8 +3,8 @@ variable "actions_enabled"{
   type        = bool
   default     = true
 }
-variable "bucket"{
-  description = "S3 bucket name"
+variable "domain_name"{
+  description = "S3 bucket name and domain name"
   type        = string
   default     = ""
 }
@@ -15,17 +15,17 @@ variable "evaluation_periods"{
 }
 variable "period"{
   description = "Period to look back"
-  type        = string
-  default     = ""
+  type        = number
+  default     = 60
 }
 variable "threshold"{
   description = "Threshold to trigger action"
   type        = number
   default     = 1
 }
-variable "StorageType"{
+variable "storage_type"{
   description = "Storage type"
   type        = string
-  default     = ""
+  default     = "AllStorageTypes"
 }
 variable "arn"{}

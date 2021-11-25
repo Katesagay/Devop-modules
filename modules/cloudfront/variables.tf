@@ -2,7 +2,7 @@ variable "origin_domain_name"{}
 
 variable "domain_names" {
   type    = list(any)
-  default = ["devout.dev", "www.devout.dev"]
+  default = []
 }
 
 variable "ttl" {
@@ -31,8 +31,6 @@ variable "cloudfront_distribution" {
 }
 
 variable "s3_origin_id" {
-  type    = string
-  default = "S3-devout.dev"
 }
 variable "enabled" {
   type    = bool
@@ -54,10 +52,10 @@ variable "include_cookies" {
   type    = bool
   default = false
 }
-variable "bucket" {
-  type    = string
-  default = "devout.dev"
-}
+# variable "bucket" {
+#   type    = string
+#   default = "devout.dev"
+# }
 variable "bucket_name" {
 }
 variable "prefix" {
