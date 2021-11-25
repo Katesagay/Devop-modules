@@ -3,7 +3,6 @@ variable "bucket_acl" {}
 variable "force_destroy" {}
 
 variable "cloudfront_actions_enabled" {}
-variable "distribution_id" {}
 variable "S3_actions_enabled" {}
 variable "email_address" {}
 variable "topic_name" {}
